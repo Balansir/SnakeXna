@@ -44,9 +44,8 @@ namespace SnakeProject
         public SnakeBlock(Game game)
             : base(game, game.Content.Load<Texture2D>("SnakeBlock"))
         {
-            Size = new Vector2(30, 30);
-            _defaultPath = 30;
-            //currentPath = _defaultPath;
+            Size = new Vector2(31, 31);
+            _defaultPath = 31;
         }
 
         public override void Update(GameTime gameTime)

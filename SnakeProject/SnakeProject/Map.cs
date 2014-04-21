@@ -57,7 +57,7 @@ namespace SnakeProject
                     if (mask[i][j] == '0')
                         continue;
                     
-                    var wall = new Wall(Game) {Size = new Vector2(30, 30), Location = new Vector2(startX + j*30, startY + i*30)};
+                    var wall = new Wall(Game) {Size = new Vector2(31, 31), Location = new Vector2(startX + j*31, startY + i*31)};
                     Game.Components.Add(wall);
                 }
             }

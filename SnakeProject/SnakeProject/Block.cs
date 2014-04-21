@@ -13,6 +13,7 @@ namespace SnakeProject
         protected float _rotaion;
         private Vector2 _centerPoint;
         private Rectangle _bounds;
+        protected Rectangle _drawableBounds;
         private Texture2D _texture;
         private SpriteBatch _spBatch;
 
@@ -24,8 +25,10 @@ namespace SnakeProject
             {
                 _bounds.Width = (int)value.X;
                 _bounds.Height = (int)value.Y;
+                _drawableBounds.Width = _bounds.Width - 1;
+                _drawableBounds.Height = _bounds.Height - 1;
 
-                _centerPoint = new Vector2(_bounds.Width/2, _bounds.Height/2);
+                _centerPoint = new Vector2(_drawableBounds.Width / 2, _drawableBounds.Height / 2);
             }
         }
 
@@ -40,6 +43,8 @@ namespace SnakeProject
             {
                 _bounds.X = (int)value.X;
                 _bounds.Y = (int)value.Y;
+                _drawableBounds.X = _bounds.X;
+                _drawableBounds.Y = _bounds.Y;
             }
         }
 
@@ -60,12 +65,13 @@ namespace SnakeProject
 
             _color = new Color(255, 255, 0);
             _rotaion = 0;
+            _drawableBounds = new Rectangle();
         }
 
         public override void Draw(GameTime gameTime)
         {
             _spBatch.Begin();
-            _spBatch.Draw(_texture, _bounds, null, _color, _rotaion, _centerPoint, SpriteEffects.None, 0);
+            _spBatch.Draw(_texture, _drawableBounds, null, _color, _rotaion, _centerPoint, SpriteEffects.None, 0);
             _spBatch.End();
         }
     }
