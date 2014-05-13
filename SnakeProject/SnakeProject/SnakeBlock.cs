@@ -41,11 +41,14 @@ namespace SnakeProject
             }
         }
 
+	    public event Action<Vector2, Vector2> CurrentPathChanged;
+
+
         public SnakeBlock(Game game)
             : base(game, game.Content.Load<Texture2D>("SnakeBlock"))
         {
-            Size = new Vector2(31, 31);
-            _defaultPath = 31;
+            Size = new Vector2(Helper.SizeBlock, Helper.SizeBlock);
+            _defaultPath = Helper.SizeBlock;
         }
 
         public override void Update(GameTime gameTime)
@@ -53,7 +56,7 @@ namespace SnakeProject
             // перемещаем блок
             if (currentPath == 0) // если дошли до точки возможной смены направления
             {
-                currentPath = _defaultPath;
+				currentPath = _defaultPath;	
                 if (_nextVector != null)
                     _currentVector = _nextVector.Value;
                 else
@@ -61,6 +64,10 @@ namespace SnakeProject
 
                 _nextVector = null;
                 _rotaion = (float) Math.Atan2(Vector.Y, Vector.X);
+
+				// когда дошли до места где можно сменить направление, генерируем событие (нужно для карты)
+				if (CurrentPathChanged != null)
+					CurrentPathChanged(Location, Vector);
             }
             
             // перемешение блока

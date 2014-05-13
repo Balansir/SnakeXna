@@ -41,7 +41,7 @@ namespace SnakeProject
             //Components.Add(grid);
             //var w1 = new Wall(this) {Location = new Vector2(100, 100), Size = new Vector2(50, 50)};
             //var w2 = new Wall(this) { Location = new Vector2(200, 100), Size = new Vector2(30, 30) };
-            var map = new Map(this) {Location = new Vector2(0, 0)};
+            var map = new Map(this) {Location = new Vector2(10, 10)};
 
             this.Components.Add(map);
             base.Initialize();
@@ -93,5 +93,10 @@ namespace SnakeProject
 
             base.Draw(gameTime);
         }
+
+	    protected override void OnExiting(object sender, EventArgs args)
+	    {
+		    base.OnExiting(sender, args);
+	    }
     }
 }

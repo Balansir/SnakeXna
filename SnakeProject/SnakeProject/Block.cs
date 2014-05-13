@@ -25,10 +25,10 @@ namespace SnakeProject
             {
                 _bounds.Width = (int)value.X;
                 _bounds.Height = (int)value.Y;
-                _drawableBounds.Width = _bounds.Width - 1;
-                _drawableBounds.Height = _bounds.Height - 1;
+                _drawableBounds.Width = _bounds.Width;
+                _drawableBounds.Height = _bounds.Height;
 
-                _centerPoint = new Vector2(_drawableBounds.Width / 2, _drawableBounds.Height / 2);
+                _centerPoint = new Vector2(_drawableBounds.Width / 2 + 1, _drawableBounds.Height / 2 + 1);
             }
         }
 
@@ -71,7 +71,8 @@ namespace SnakeProject
         public override void Draw(GameTime gameTime)
         {
             _spBatch.Begin();
-            _spBatch.Draw(_texture, _drawableBounds, null, _color, _rotaion, _centerPoint, SpriteEffects.None, 0);
+            //_spBatch.Draw(_texture, _drawableBounds, null, _color, _rotaion, _centerPoint, SpriteEffects.None, 0);
+	        _spBatch.Draw(_texture, _drawableBounds, null, _color);
             _spBatch.End();
         }
     }

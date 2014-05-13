@@ -1,11 +1,14 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeProject", "SnakeProject\SnakeProject\SnakeProject.csproj", "{741C6066-6FF7-4D40-AEE8-CE497A7C7CEA}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "SnakeProjectContent", "SnakeProject\SnakeProjectContent\SnakeProjectContent.contentproj", "{0F106F3E-3AAC-40D9-94D7-12C9F93E5181}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeProjectContent", "SnakeProject\SnakeProjectContent\SnakeProjectContent.contentproj", "{0F106F3E-3AAC-40D9-94D7-12C9F93E5181}"
 EndProject
 Global
+	GlobalSection(PowerDesigner) = preSolution
+		HasSWS = 1
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86

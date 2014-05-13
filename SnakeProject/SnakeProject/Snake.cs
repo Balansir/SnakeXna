@@ -14,6 +14,7 @@ namespace SnakeProject
         private int _length;
         private List<SnakeBlock> _body;
         private Vector2 _vector;
+	    private Map _map;
 
         public Vector2 Vector
         {
@@ -31,11 +32,12 @@ namespace SnakeProject
 
         public Vector2 Location { get; set; }
 
-        public Snake(Game game, int countBlock = 10)
+        public Snake(Game game, Map map, int countBlock = 3)
             : base(game)
         {
             _body = new List<SnakeBlock>();
             _length = countBlock;
+	        _map = map;
             Location = new Vector2(0, 0);
         }
 
@@ -43,8 +45,9 @@ namespace SnakeProject
         {
             base.Initialize();
 
-            // create by head
+            // create head
             var head = new SnakeBlock(Game) {Location = Location, Vector = Vector}; // для головы другую текстурку нужно
+			head.CurrentPathChanged += SnakeBlockCurrentPathChanged;
             _body.Add(head);
             for (int i = 1; i < _length; i++)
             {
@@ -57,7 +60,28 @@ namespace SnakeProject
             UpdateSnakeBlock();
         }
 
-        public override void Update(GameTime gameTime)
+	    private void SnakeBlockCurrentPathChanged(Vector2 location, Vector2 vector)
+	    {
+		    var result = _map.UpdateMaskMap(location, vector, Masks.Snake);
+		    if (result == TypeMessage.Add)
+		    {
+				// если съели яблоко, увеличиваем змею
+				// добавляем в начало голову
+			    var newLocation = new Vector2(location.X + Helper.SizeBlock*vector.X, location.Y + Helper.SizeBlock*vector.Y);
+			    var head = new SnakeBlock(Game) {Location = newLocation, Vector = vector};
+			    _body[0].CurrentPathChanged -= SnakeBlockCurrentPathChanged;
+			    head.CurrentPathChanged += SnakeBlockCurrentPathChanged;
+			    _body.Insert(0, head);
+			    Game.Components.Add(head);
+				UpdateSnakeBlock();
+				
+				_map.AppleRemove();
+				_map.AppleAdd();
+		    }
+
+	    }
+
+	    public override void Update(GameTime gameTime)
         {
             var stateKeyBoard = Keyboard.GetState();
             if (stateKeyBoard.IsKeyDown(Keys.W))
@@ -80,7 +104,6 @@ namespace SnakeProject
                 return;
 
             for (int i = 1; i < _body.Count; i++)
-                //_body[i].Vector = _body[i - 1].Vector;
                 _body[i].GoToPoint = _body[i - 1].Location;
         }
     }
