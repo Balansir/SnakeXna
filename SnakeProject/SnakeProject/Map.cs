@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace SnakeProject
 {
-    public class Map:DrawableGameComponent
+    public class Map:GameComponent
     {
         private int startX = 0;
         private int startY = 0;
@@ -15,6 +15,7 @@ namespace SnakeProject
 	    private int SizeY;
 
 	    private AppleBlock _apple;
+	    private Snake _snake;
 
 	    private int[,] _mask;
 
@@ -33,10 +34,14 @@ namespace SnakeProject
             }
         }
 
+	    public Snake Snake { get { return _snake; }}
+
         public Map(Game game)
             : base(game)
         {
 	        _path = "map.txt";
+
+	        _snake = new Snake(Game, this);
         }
 
         public override void Initialize()
@@ -78,7 +83,9 @@ namespace SnakeProject
             // insert snake
 	        int startIndexX = 5;
 	        int startIndexY = 1;
-	        Game.Components.Add(new Snake(Game, this) {Location = new Vector2(startX + startIndexX*Helper.SizeBlock, startY + startIndexY*Helper.SizeBlock), Vector = new Vector2(1, 0)});
+	        _snake.Location = new Vector2(startX + startIndexX*Helper.SizeBlock, startY + startIndexY*Helper.SizeBlock);
+	        _snake.Vector = new Vector2(1, 0);
+	        Game.Components.Add(_snake);
 
 			// добавляем яблоко
 	        _apple = new AppleBlock(Game);

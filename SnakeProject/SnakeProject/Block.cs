@@ -10,10 +10,7 @@ namespace SnakeProject
     public class Block:DrawableGameComponent
     {
         private Color _color;
-        protected float _rotaion;
-        private Vector2 _centerPoint;
         private Rectangle _bounds;
-        protected Rectangle _drawableBounds;
         private Texture2D _texture;
         private SpriteBatch _spBatch;
 
@@ -25,10 +22,6 @@ namespace SnakeProject
             {
                 _bounds.Width = (int)value.X;
                 _bounds.Height = (int)value.Y;
-                _drawableBounds.Width = _bounds.Width;
-                _drawableBounds.Height = _bounds.Height;
-
-                _centerPoint = new Vector2(_drawableBounds.Width / 2 + 1, _drawableBounds.Height / 2 + 1);
             }
         }
 
@@ -43,8 +36,6 @@ namespace SnakeProject
             {
                 _bounds.X = (int)value.X;
                 _bounds.Y = (int)value.Y;
-                _drawableBounds.X = _bounds.X;
-                _drawableBounds.Y = _bounds.Y;
             }
         }
 
@@ -64,15 +55,12 @@ namespace SnakeProject
             _spBatch = new SpriteBatch(game.GraphicsDevice);
 
             _color = new Color(255, 255, 0);
-            _rotaion = 0;
-            _drawableBounds = new Rectangle();
         }
 
         public override void Draw(GameTime gameTime)
         {
             _spBatch.Begin();
-            //_spBatch.Draw(_texture, _drawableBounds, null, _color, _rotaion, _centerPoint, SpriteEffects.None, 0);
-	        _spBatch.Draw(_texture, _drawableBounds, null, _color);
+	        _spBatch.Draw(_texture, _bounds, null, _color);
             _spBatch.End();
         }
     }

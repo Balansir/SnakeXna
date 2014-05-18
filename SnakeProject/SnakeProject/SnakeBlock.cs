@@ -63,7 +63,6 @@ namespace SnakeProject
                     GoToPoint = Location + _currentVector*currentPath;
 
                 _nextVector = null;
-                _rotaion = (float) Math.Atan2(Vector.Y, Vector.X);
 
 				// когда дошли до места где можно сменить направление, генерируем событие (нужно для карты)
 				if (CurrentPathChanged != null)

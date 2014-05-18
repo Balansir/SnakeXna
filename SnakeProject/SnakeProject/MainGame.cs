@@ -19,6 +19,12 @@ namespace SnakeProject
         GraphicsDeviceManager graphics;
         static SpriteBatch Sprite;
 
+	    private int _countEatenApples;
+
+	    private SpriteFont _font;
+
+		private Vector2 _locationCountEatenApples;
+
         public MainGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,69 +33,62 @@ namespace SnakeProject
             graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
+
+	        _countEatenApples = 0;
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
-            var grid = new Grid(this) {Size = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Location = new Vector2(0, 0), Color = Color.AliceBlue};
-            //Components.Add(grid);
-            //var w1 = new Wall(this) {Location = new Vector2(100, 100), Size = new Vector2(50, 50)};
-            //var w2 = new Wall(this) { Location = new Vector2(200, 100), Size = new Vector2(30, 30) };
             var map = new Map(this) {Location = new Vector2(10, 10)};
+			map.Snake.CountBlockChanged += SnakeOnCountBlockChanged;
+            Components.Add(map);
 
-            this.Components.Add(map);
+	        var grid = new Grid(this, new Rectangle(graphics.PreferredBackBufferWidth - 150, 10, 140, graphics.PreferredBackBufferHeight - 30), new Vector2(140, graphics.PreferredBackBufferHeight - 30));
+	        grid.Color = Color.BlueViolet;
+	        Components.Add(grid);
+
+	        var statisticAppleBlock = new AppleBlock(this)
+			{
+				Location = new Vector2(graphics.PreferredBackBufferWidth - 140, 60),
+				Size = new Vector2(30, 30)
+			};
+	        Components.Add(statisticAppleBlock);
+
+			_locationCountEatenApples = new Vector2(graphics.PreferredBackBufferWidth - 100, 50);
+
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
+	    private void SnakeOnCountBlockChanged(int countBlock)
+	    {
+		    _countEatenApples++;
+	    }
+
+	    protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             Sprite = new SpriteBatch(GraphicsDevice);
+		    _font = Content.Load<SpriteFont>("font");
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            int a = 1;
-
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
-            // graw grid lines
-            Sprite.Begin();
-            
-            Sprite.End();
+	        Sprite.Begin();
+
+
+	        Sprite.DrawString(_font, string.Format("{0}", _countEatenApples), _locationCountEatenApples, Color.OrangeRed);
+			Sprite.End();
 
             base.Draw(gameTime);
         }

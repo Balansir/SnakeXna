@@ -32,6 +32,8 @@ namespace SnakeProject
 
         public Vector2 Location { get; set; }
 
+	    public event Action<int> CountBlockChanged;
+
         public Snake(Game game, Map map, int countBlock = 3)
             : base(game)
         {
@@ -77,6 +79,8 @@ namespace SnakeProject
 				
 				_map.AppleRemove();
 				_map.AppleAdd();
+			    if (CountBlockChanged != null)
+				    CountBlockChanged(_body.Count);
 		    }
 
 	    }
