@@ -11,15 +11,21 @@ namespace SnakeProject
     {
         private int startX = 0;
         private int startY = 0;
-	    private int SizeX;
-	    private int SizeY;
-
+	    
+		
 	    private AppleBlock _apple;
 	    private Snake _snake;
+	    private Mongoose _mongoose;
 
 	    private int[,] _mask;
 
 	    private string _path;
+	    private bool _withMangoose;
+
+		public int SizeX;
+		public int SizeY;
+
+	    public int[,] Mask { get { return _mask; } }
 
         public Vector2 Location
         {
@@ -36,11 +42,11 @@ namespace SnakeProject
 
 	    public Snake Snake { get { return _snake; }}
 
-        public Map(Game game)
+        public Map(Game game, bool withMangoose = false)
             : base(game)
         {
 	        _path = "map.txt";
-
+	        _withMangoose = withMangoose;
 	        _snake = new Snake(Game, this);
         }
 
@@ -81,8 +87,8 @@ namespace SnakeProject
 	        SizeY = dy;
 
             // insert snake
-	        int startIndexX = 5;
-	        int startIndexY = 1;
+	        int startIndexX = 6;
+	        int startIndexY = 2;
 	        _snake.Location = new Vector2(startX + startIndexX*Helper.SizeBlock, startY + startIndexY*Helper.SizeBlock);
 	        _snake.Vector = new Vector2(1, 0);
 	        Game.Components.Add(_snake);
@@ -91,6 +97,9 @@ namespace SnakeProject
 	        _apple = new AppleBlock(Game);
 			Game.Components.Add(_apple);
 			AppleAdd();
+
+			if (_withMangoose)
+				MongooseAdd();
         }
 
 		public TypeMessage UpdateMaskMap(Vector2 location, Vector2 vector, Masks type)
@@ -107,28 +116,39 @@ namespace SnakeProject
 			switch (type)
 			{
 				case Masks.Snake:
-					if (_mask[i, j] != (int) Masks.Empty && _mask[iNext, jNext] != (int) Masks.Apple)
+					if (_mask[iNext, jNext] == (int) Masks.Wall)
 					{
-						Game.Exit();
+						return TypeMessage.WallBreak;
 					}
-					else if (_mask[iNext, jNext] == (int) Masks.Apple)
+					if (_mask[iNext, jNext] == (int) Masks.Apple)
 					{
 						_mask[iNext, jNext] = (int) Masks.Snake;
 						_mask[i, j] = (int) Masks.Empty;
 						// обработать съедание яблока
 						return TypeMessage.Add;
 					}
+					_mask[iNext, jNext] = (int) Masks.Snake;
+					_mask[i, j] = (int) Masks.Empty;
+					break;
+				case Masks.Sk:
+					if (_mask[iNext, jNext] == (int)Masks.Snake)
+						return TypeMessage.Dead;
+					_mask[i, j] = (int) Masks.Empty;
+					_mask[iNext, jNext] = (int) Masks.Sk;
+					_mongoose.I = iNext;
+					_mongoose.J = jNext;
+
 					break;
 			}
-			return TypeMessage.Dead;
+			
+			return TypeMessage.None;
 	    }
 
 	    public void AppleAdd()
 	    {
 		    var rnd = new Random();
 
-
-		    // выбираем свободное пространство
+			// выбираем свободное пространство
 		    var freeSpace = new List<int>();
 		    int index = 0;
 		    foreach (var item in _mask)
@@ -152,6 +172,18 @@ namespace SnakeProject
 	    {
 			_mask[_apple.I, _apple.J] = (int)Masks.Empty;
 		    _apple.Visible = false;
+	    }
+
+	    private void MongooseAdd()
+	    {
+			_mongoose = new Mongoose(Game, this);
+			_mongoose.I = SizeY - 2;
+			_mongoose.J = SizeX - 2;
+		    _mask[_mongoose.I, _mongoose.J] = (int) Masks.Sk;
+		    _mongoose.Location = new Vector2(startX + _mongoose.J*Helper.SizeBlock, startY + _mongoose.I*Helper.SizeBlock);
+			
+
+			Game.Components.Add(_mongoose);
 	    }
 
 	    private Vector2 GetLocationByMaskIndex(int i, int j)

@@ -12,7 +12,7 @@ namespace SnakeProject
 		public static int MaskWallBlock = 1;
 		public static int MaskEmptyBlock = 0;
 
-		
+		public static double SpeedMangoose = 0.9;
 	}
 
 	public enum Masks
@@ -28,6 +28,7 @@ namespace SnakeProject
 	{
 		Dead,
 		Add,
-		WallBreak
+		WallBreak,
+		None
 	}
 }

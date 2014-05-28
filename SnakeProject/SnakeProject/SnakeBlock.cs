@@ -12,7 +12,7 @@ namespace SnakeProject
         private int currentPath;
         private int _defaultPath;
         private Vector2 _destinationPoint;
-        private Vector2 _currentVector;
+        protected Vector2 _currentVector;
         private Vector2? _nextVector;
 
         public Vector2 Vector

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace SnakeProject
 {
@@ -10,7 +11,15 @@ namespace SnakeProject
         /// </summary>
         static void Main(string[] args)
         {
-            using (MainGame game = new MainGame())
+	        bool _isHard;
+	        using (MainForm form = new MainForm())
+	        {
+		        if (form.ShowDialog() != DialogResult.OK)
+					return;
+		        _isHard = form.GetDifficult();
+	        }
+
+			using (MainGame game = new MainGame(_isHard))
             {
                 game.Run();
             }

@@ -11,7 +11,7 @@ namespace SnakeProject
     {
         private Color _color;
         private Rectangle _bounds;
-        private Texture2D _texture;
+        protected Texture2D _texture;
         private SpriteBatch _spBatch;
 
 

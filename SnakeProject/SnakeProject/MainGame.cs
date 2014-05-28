@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
+
 namespace SnakeProject
 {
     /// <summary>
@@ -20,13 +21,16 @@ namespace SnakeProject
         static SpriteBatch Sprite;
 
 	    private int _countEatenApples;
+	    private bool _isHard;
 
 	    private SpriteFont _font;
 
 		private Vector2 _locationCountEatenApples;
 
-        public MainGame()
+        public MainGame(bool isHard)
         {
+	        _isHard = isHard;
+
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 600;
@@ -34,12 +38,15 @@ namespace SnakeProject
 
             Content.RootDirectory = "Content";
 
+	        IsFixedTimeStep = true;
+	        TargetElapsedTime = new TimeSpan(200000);
+
 	        _countEatenApples = 0;
         }
 
         protected override void Initialize()
         {
-            var map = new Map(this) {Location = new Vector2(10, 10)};
+            var map = new Map(this, _isHard) {Location = new Vector2(10, 10)};
 			map.Snake.CountBlockChanged += SnakeOnCountBlockChanged;
             Components.Add(map);
 
